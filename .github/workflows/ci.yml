@@ -36,7 +36,7 @@ jobs:
 
       - name: Show diff
         env:
-          DIGITALOCEAN_ACCESS_TOKEN: {{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+          DIGITALOCEAN_ACCESS_TOKEN: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
         run: appfile -f .do/appfile.yaml -e review diff
 
   test_custom_version_linux_and_mac:
@@ -58,7 +58,7 @@ jobs:
           if [ "$VERSION" != "v0.0.1" ]; then exit 1; fi
       - name: Show diff
         env:
-          DIGITALOCEAN_ACCESS_TOKEN: {{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+          DIGITALOCEAN_ACCESS_TOKEN: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
         run: appfile -f .do/appfile.yaml -e review diff
 
   test_custom_version_windows:
@@ -77,5 +77,5 @@ jobs:
           If (-NOT  ($VERSION -eq "v0.0.1")) { exit 1 }
       - name: Show diff
         env:
-          DIGITALOCEAN_ACCESS_TOKEN: {{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+          DIGITALOCEAN_ACCESS_TOKEN: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
         run: appfile -f .do/appfile.yaml -e review diff
