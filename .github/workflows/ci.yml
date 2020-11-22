@@ -1,0 +1,81 @@
+on: [push, pull_request_target]
+
+name: Test and lint
+
+jobs:
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: npm test
+
+  package_check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: "Ensure that code has been packaged and committed"
+        run: |-
+            npm install
+            npm run package
+            git diff --exit-code dist/index.js || \
+              (echo -e "\nPlease run 'npm run package' and commit the results" && exit 1)
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install appfile
+        uses: ./
+
+      - name: Verify installation
+        run: appfile --version
+
+      - name: Show diff
+        env:
+          DIGITALOCEAN_ACCESS_TOKEN: {{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+        run: appfile -f .do/appfile.yaml -e review diff
+
+  test_custom_version_linux_and_mac:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install appfile
+        uses: ./
+        with:
+          version: 0.0.1
+
+      - name: Verify installation of correct version
+        run: |
+          VERSION=$(appfile --version | head -1 | cut -f3 -d' ' | cut -f1 -d'-')
+          if [ "$VERSION" != "v0.0.1" ]; then exit 1; fi
+      - name: Show diff
+        env:
+          DIGITALOCEAN_ACCESS_TOKEN: {{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+        run: appfile -f .do/appfile.yaml -e review diff
+
+  test_custom_version_windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install appfile
+        uses: ./
+        with:
+          version: 0.0.1
+
+      - name: Verify installation of correct version
+        run: |
+          $VERSION = (appfile --version | head -1 | cut -f3 -d' ' | cut -f1 -d'-')
+          If (-NOT  ($VERSION -eq "v0.0.1")) { exit 1 }
+      - name: Show diff
+        env:
+          DIGITALOCEAN_ACCESS_TOKEN: {{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+        run: appfile -f .do/appfile.yaml -e review diff

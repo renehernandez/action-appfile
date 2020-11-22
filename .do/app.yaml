@@ -1,0 +1,8 @@
+name: {{ .Values.name }}
+static_sites:
+- environment_slug: html
+  github:
+    branch: {{ .Values.branch }}
+    deploy_on_push: false
+    repo: renehernandez/sample-html
+  name: html

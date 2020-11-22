@@ -1,0 +1,14 @@
+name: 'Github Action for appfile cli'
+description: 'Use appfile to manage your Apps in DigitalOcean App Platform'
+author: 'Rene Hernandez'
+branding:
+  icon: 'droplet'
+  color: 'blue'
+inputs:
+  version:
+    description: 'Version of appfile to install'
+    default: 'latest'
+    required: false
+runs:
+  using: 'node12'
+  main: 'dist/index.js'

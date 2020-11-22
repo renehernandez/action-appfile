@@ -1,0 +1,6 @@
+environments:
+  review:
+  - ./review.yaml
+
+specs:
+- app.yaml

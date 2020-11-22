@@ -1,0 +1,39 @@
+{
+  "name": "action-appfile",
+  "version": "1.0.0",
+  "description": "Github Action for appfile cli",
+  "main": "main.js",
+  "scripts": {
+    "lint": "eslint main.js",
+    "test": "npm install; npm run lint",
+    "package": "ncc build main.js -o dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/renehernandez/action-appfile.git"
+  },
+  "keywords": [
+    "GitHub",
+    "Actions",
+    "DigitalOcean",
+    "App Platform",
+    "CI/CD",
+    "deployment",
+    "cloud"
+  ],
+  "author": "Rene Hernandez",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/renehernandez/action-appfile/issues"
+  },
+  "homepage": "https://github.com/renehernandez/action-appfile#readme",
+  "dependencies": {
+    "@actions/core": "^1.2.6",
+    "@actions/github": "^4.0.0",
+    "@octokit/rest": "^18.0.9",
+    "@zeit/ncc": "^0.22.3"
+  },
+  "devDependencies": {
+    "eslint": "^7.14.0"
+  }
+}
