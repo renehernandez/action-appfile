@@ -3,7 +3,6 @@ const exec = require('@actions/exec');
 const io = require('@actions/io')
 const tc = require('@actions/tool-cache');
 const { Octokit } = require("@octokit/rest");
-const { dirname } = require('path');
 const path = require("path");
 
 const baseDownloadURL = "https://github.com/renehernandez/appfile/releases/download"
@@ -43,7 +42,7 @@ async function install(version) {
     }
 
     core.info(`Cache directory ${dirName} with appfile executable`);
-    cachedPath = await tc.cacheDir(dirName, fileName, version);
+    const cachedPath = await tc.cacheDir(dirName, fileName, version);
     core.info(`Make ${cachedPath} available in path`);
     core.addPath(cachedPath);
 }

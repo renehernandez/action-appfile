@@ -1723,7 +1723,6 @@ const exec = __webpack_require__(986);
 const io = __webpack_require__(1)
 const tc = __webpack_require__(533);
 const { Octokit } = __webpack_require__(889);
-const { dirname } = __webpack_require__(622);
 const path = __webpack_require__(622);
 
 const baseDownloadURL = "https://github.com/renehernandez/appfile/releases/download"
@@ -1763,7 +1762,7 @@ async function install(version) {
     }
 
     core.info(`Cache directory ${dirName} with appfile executable`);
-    cachedPath = await tc.cacheDir(dirName, fileName, version);
+    const cachedPath = await tc.cacheDir(dirName, fileName, version);
     core.info(`Make ${cachedPath} available in path`);
     core.addPath(cachedPath);
 }
