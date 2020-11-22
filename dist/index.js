@@ -42,8 +42,6 @@ module.exports =
 /******/ 		// Load entry module and return exports
 /******/ 		return __webpack_require__(334);
 /******/ 	};
-/******/ 	// initialize runtime
-/******/ 	runtime(__webpack_require__);
 /******/
 /******/ 	// run startup
 /******/ 	return startup();
@@ -1718,18 +1716,14 @@ exports.paginateRest = paginateRest;
 /***/ }),
 
 /***/ 334:
-/***/ (function(__unusedmodule, __webpack_exports__, __webpack_require__) {
+/***/ (function(__unusedmodule, __unusedexports, __webpack_require__) {
 
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(622);
-/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(path__WEBPACK_IMPORTED_MODULE_0__);
 const core = __webpack_require__(470);
 const exec = __webpack_require__(986);
 const io = __webpack_require__(1)
 const tc = __webpack_require__(533);
 const { Octokit } = __webpack_require__(889);
-
+const path = __webpack_require__(622);
 
 const baseDownloadURL = "https://github.com/renehernandez/appfile/releases/download"
 const fallbackVersion = "0.0.1"
@@ -1750,7 +1744,7 @@ async function downloadAppfile(version) {
 
 async function install(version) {
     const downloadPath = await downloadAppfile(version);
-    const dirName = path__WEBPACK_IMPORTED_MODULE_0__.dirname(downloadPath)
+    const dirName = path.dirname(downloadPath)
 
     core.debug(`Rename file to appfile`);
     io.mv(downloadPath, `${dirname}/appfile`);
@@ -1786,7 +1780,7 @@ async function run() {
         if (!path) {
             install(version);
         }
-        core.info(`>>> appfile version v${version} installed`);
+        core.info(`>>> appfile version v${version} installed successfully`);
         await exec.exec('appfile --help');
         core.info('>>> Successfully executed help for appfile');
     }
@@ -9533,43 +9527,4 @@ exports.exec = exec;
 
 /***/ })
 
-/******/ },
-/******/ function(__webpack_require__) { // webpackRuntimeModules
-/******/ 	"use strict";
-/******/ 
-/******/ 	/* webpack/runtime/make namespace object */
-/******/ 	!function() {
-/******/ 		// define __esModule on exports
-/******/ 		__webpack_require__.r = function(exports) {
-/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
-/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
-/******/ 			}
-/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
-/******/ 		};
-/******/ 	}();
-/******/ 	
-/******/ 	/* webpack/runtime/compat get default export */
-/******/ 	!function() {
-/******/ 		// getDefaultExport function for compatibility with non-harmony modules
-/******/ 		__webpack_require__.n = function(module) {
-/******/ 			var getter = module && module.__esModule ?
-/******/ 				function getDefault() { return module['default']; } :
-/******/ 				function getModuleExports() { return module; };
-/******/ 			__webpack_require__.d(getter, 'a', getter);
-/******/ 			return getter;
-/******/ 		};
-/******/ 	}();
-/******/ 	
-/******/ 	/* webpack/runtime/define property getter */
-/******/ 	!function() {
-/******/ 		// define getter function for harmony exports
-/******/ 		var hasOwnProperty = Object.prototype.hasOwnProperty;
-/******/ 		__webpack_require__.d = function(exports, name, getter) {
-/******/ 			if(!hasOwnProperty.call(exports, name)) {
-/******/ 				Object.defineProperty(exports, name, { enumerable: true, get: getter });
-/******/ 			}
-/******/ 		};
-/******/ 	}();
-/******/ 	
-/******/ }
-);
+/******/ });

@@ -3,7 +3,7 @@ const exec = require('@actions/exec');
 const io = require('@actions/io')
 const tc = require('@actions/tool-cache');
 const { Octokit } = require("@octokit/rest");
-import * as path from 'path'
+const path = require("path");
 
 const baseDownloadURL = "https://github.com/renehernandez/appfile/releases/download"
 const fallbackVersion = "0.0.1"
@@ -60,7 +60,7 @@ async function run() {
         if (!path) {
             install(version);
         }
-        core.info(`>>> appfile version v${version} installed`);
+        core.info(`>>> appfile version v${version} installed successfully`);
         await exec.exec('appfile --help');
         core.info('>>> Successfully executed help for appfile');
     }
