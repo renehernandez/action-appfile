@@ -3,6 +3,7 @@ const exec = require('@actions/exec');
 const io = require('@actions/io')
 const tc = require('@actions/tool-cache');
 const { Octokit } = require("@octokit/rest");
+const { dirname } = require('path');
 const path = require("path");
 
 const baseDownloadURL = "https://github.com/renehernandez/appfile/releases/download"
@@ -23,13 +24,18 @@ async function downloadAppfile(version) {
 }
 
 async function install(version) {
+    core.info(`Downloading appfile binary`)
     const downloadPath = await downloadAppfile(version);
     const dirName = path.dirname(downloadPath)
 
-    core.debug(`Rename file to appfile`);
+    core.info(`Renaming file to generic appfile`)
     io.mv(downloadPath, `${dirname}/appfile`);
+    core.info(`Making appfile binary executable`)
+    await exec.exec("chmod", ["+x", `${dirname}/appfile`]);
 
+    core.info(`Cache directory ${dirname} with appfile executable`)
     path = await tc.cacheDir(dirName, 'appfile', version);
+    core.info(`Make ${path} available in path`)
     core.addPath(path);
 }
 

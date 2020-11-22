@@ -1723,6 +1723,7 @@ const exec = __webpack_require__(986);
 const io = __webpack_require__(1)
 const tc = __webpack_require__(533);
 const { Octokit } = __webpack_require__(889);
+const { dirname } = __webpack_require__(622);
 const path = __webpack_require__(622);
 
 const baseDownloadURL = "https://github.com/renehernandez/appfile/releases/download"
@@ -1743,13 +1744,18 @@ async function downloadAppfile(version) {
 }
 
 async function install(version) {
+    core.info(`Downloading appfile binary`)
     const downloadPath = await downloadAppfile(version);
     const dirName = path.dirname(downloadPath)
 
-    core.debug(`Rename file to appfile`);
+    core.info(`Renaming file to generic appfile`)
     io.mv(downloadPath, `${dirname}/appfile`);
+    core.info(`Making appfile binary executable`)
+    await exec.exec("chmod", ["+x", `${dirname}/appfile`]);
 
+    core.info(`Cache directory ${dirname} with appfile executable`)
     path = await tc.cacheDir(dirName, 'appfile', version);
+    core.info(`Make ${path} available in path`)
     core.addPath(path);
 }
 
