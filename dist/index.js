@@ -1754,9 +1754,9 @@ async function install(version) {
     await exec.exec("chmod", ["+x", `${dirName}/appfile`]);
 
     core.info(`Cache directory ${dirName} with appfile executable`)
-    path = await tc.cacheDir(dirName, 'appfile', version);
-    core.info(`Make ${path} available in path`)
-    core.addPath(path);
+    cachedPath = await tc.cacheDir(dirName, 'appfile', version);
+    core.info(`Make ${cachedPath} available in path`)
+    core.addPath(cachedPath);
 }
 
 async function run() {
