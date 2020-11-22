@@ -1749,11 +1749,11 @@ async function install(version) {
     const dirName = path.dirname(downloadPath)
 
     core.info(`Renaming file to generic appfile`)
-    await io.mv(downloadPath, `${dirname}/appfile`);
+    await io.mv(downloadPath, `${dirName}/appfile`);
     core.info(`Making appfile binary executable`)
-    await exec.exec("chmod", ["+x", `${dirname}/appfile`]);
+    await exec.exec("chmod", ["+x", `${dirName}/appfile`]);
 
-    core.info(`Cache directory ${dirname} with appfile executable`)
+    core.info(`Cache directory ${dirName} with appfile executable`)
     path = await tc.cacheDir(dirName, 'appfile', version);
     core.info(`Make ${path} available in path`)
     core.addPath(path);
