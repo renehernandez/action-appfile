@@ -1749,7 +1749,7 @@ async function install(version) {
     const dirName = path.dirname(downloadPath)
 
     core.info(`Renaming file to generic appfile`)
-    io.mv(downloadPath, `${dirname}/appfile`);
+    await io.mv(downloadPath, `${dirname}/appfile`);
     core.info(`Making appfile binary executable`)
     await exec.exec("chmod", ["+x", `${dirname}/appfile`]);
 
@@ -1784,7 +1784,7 @@ async function run() {
 
         var path = tc.find("appfile", version);
         if (!path) {
-            install(version);
+            await install(version);
         }
         core.info(`>>> appfile version v${version} installed successfully`);
         await exec.exec('appfile --help');
