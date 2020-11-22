@@ -29,13 +29,22 @@ async function install(version) {
     const dirName = path.dirname(downloadPath)
 
     core.info(`Renaming file to generic appfile`)
-    await io.mv(downloadPath, `${dirName}/appfile`);
-    core.info(`Making appfile binary executable`)
-    await exec.exec("chmod", ["+x", `${dirName}/appfile`]);
+    let fileName = 'appfile'
+    let appfilePath = `${dirName}/appfile`;
+    if (process.platform === 'win32') {
+        fileName = 'appfile.exe'
+        appfilePath = `${dirName}/appfile.exe`;
+    }
+    await io.mv(downloadPath, `${appfilePath}`);
 
-    core.info(`Cache directory ${dirName} with appfile executable`)
-    cachedPath = await tc.cacheDir(dirName, 'appfile', version);
-    core.info(`Make ${cachedPath} available in path`)
+    if (process.platform !== 'win32') {
+        core.info(`Making appfile binary executable`);
+        await exec.exec("chmod", ["+x", `${appfilePath}`]);
+    }
+
+    core.info(`Cache directory ${dirName} with appfile executable`);
+    cachedPath = await tc.cacheDir(dirName, fileName, version);
+    core.info(`Make ${cachedPath} available in path`);
     core.addPath(cachedPath);
 }
 
