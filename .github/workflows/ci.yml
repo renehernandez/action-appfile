@@ -3,7 +3,6 @@ on: [push, pull_request_target]
 name: Test and lint
 
 jobs:
-
   lint:
     runs-on: ubuntu-latest
     steps:

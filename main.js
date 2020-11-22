@@ -41,6 +41,7 @@ async function run() {
         if (version.charAt(0) === 'v') {
             version = version.substr(1);
         }
+        core.info(`>>> Version to use: ${version}`);
 
         var path = tc.find("appfile", version);
         if (!path) {
