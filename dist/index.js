@@ -1748,7 +1748,7 @@ async function downloadAppfile(version) {
     return appfileDownload;
 }
 
-async function install() {
+async function install(version) {
     const downloadPath = await downloadAppfile(version);
     const dirName = path__WEBPACK_IMPORTED_MODULE_0__.dirname(downloadPath)
 
@@ -1784,9 +1784,9 @@ async function run() {
 
         var path = tc.find("appfile", version);
         if (!path) {
-            install();
+            install(version);
         }
-        core.info(`>>> appfile version v${version} installed to ${path}`);
+        core.info(`>>> appfile version v${version} installed`);
         await exec.exec('appfile --help');
         core.info('>>> Successfully executed help for appfile');
     }
