@@ -1726,6 +1726,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var path__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(path__WEBPACK_IMPORTED_MODULE_0__);
 const core = __webpack_require__(470);
 const exec = __webpack_require__(986);
+const io = __webpack_require__(1)
 const tc = __webpack_require__(533);
 const { Octokit } = __webpack_require__(889);
 
@@ -1734,26 +1735,28 @@ const baseDownloadURL = "https://github.com/renehernandez/appfile/releases/downl
 const fallbackVersion = "0.0.1"
 const octokit = new Octokit();
 
-/**
- * Gets RUNNER_TEMP
- */
-function _getTempDirectory() {
-    const tempDirectory = process.env['RUNNER_TEMP'] || ''
-    ok(tempDirectory, 'Expected RUNNER_TEMP to be defined')
-    return tempDirectory
-  }
-
 async function downloadAppfile(version) {
     if (process.platform === 'win32') {
         const appfileDownload = await tc.downloadTool(`${baseDownloadURL}/v${version}/appfile_windows_amd64.exe`);
-        return path__WEBPACK_IMPORTED_MODULE_0__.dirname(appfileDownload);
+        return appfileDownload;
     }
     if (process.platform === 'darwin') {
         const appfileDownload = await tc.downloadTool(`${baseDownloadURL}/v${version}/appfile_darwin_amd64`);
-        return path__WEBPACK_IMPORTED_MODULE_0__.dirname(appfileDownload);
+        return appfileDownload;
     }
     const appfileDownload = await tc.downloadTool(`${baseDownloadURL}/v${version}/appfile_linux_amd64`);
-    return path__WEBPACK_IMPORTED_MODULE_0__.dirname(appfileDownload);
+    return appfileDownload;
+}
+
+async function install() {
+    const downloadPath = await downloadAppfile(version);
+    const dirName = path__WEBPACK_IMPORTED_MODULE_0__.dirname(downloadPath)
+
+    core.debug(`Rename file to appfile`);
+    io.mv(downloadPath, `${dirname}/appfile`);
+
+    path = await tc.cacheDir(dirName, 'appfile', version);
+    core.addPath(path);
 }
 
 async function run() {
@@ -1777,15 +1780,12 @@ async function run() {
         if (version.charAt(0) === 'v') {
             version = version.substr(1);
         }
-        core.info(`>>> Version to use: ${version}`);
+        core.info(`>>> Version to install: ${version}`);
 
         var path = tc.find("appfile", version);
         if (!path) {
-            const installPath = await downloadAppfile(version);
-            core.info(`>>> Installation path: ${installPath}`);
-            path = await tc.cacheDir(installPath, 'appfile', version);
+            install();
         }
-        core.addPath(path);
         core.info(`>>> appfile version v${version} installed to ${path}`);
         await exec.exec('appfile --help');
         core.info('>>> Successfully executed help for appfile');
