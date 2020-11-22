@@ -56,6 +56,7 @@ async function run() {
         var path = tc.find("appfile", version);
         if (!path) {
             const installPath = await downloadAppfile(version);
+            core.info(`>>> Installation path: ${installPath}`);
             path = await tc.cacheDir(installPath, 'appfile', version);
         }
         core.addPath(path);

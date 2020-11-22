@@ -42,6 +42,8 @@ module.exports =
 /******/ 		// Load entry module and return exports
 /******/ 		return __webpack_require__(334);
 /******/ 	};
+/******/ 	// initialize runtime
+/******/ 	runtime(__webpack_require__);
 /******/
 /******/ 	// run startup
 /******/ 	return startup();
@@ -1716,28 +1718,42 @@ exports.paginateRest = paginateRest;
 /***/ }),
 
 /***/ 334:
-/***/ (function(__unusedmodule, __unusedexports, __webpack_require__) {
+/***/ (function(__unusedmodule, __webpack_exports__, __webpack_require__) {
 
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(622);
+/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(path__WEBPACK_IMPORTED_MODULE_0__);
 const core = __webpack_require__(470);
 const exec = __webpack_require__(986);
 const tc = __webpack_require__(533);
 const { Octokit } = __webpack_require__(889);
 
+
 const baseDownloadURL = "https://github.com/renehernandez/appfile/releases/download"
 const fallbackVersion = "0.0.1"
 const octokit = new Octokit();
 
+/**
+ * Gets RUNNER_TEMP
+ */
+function _getTempDirectory() {
+    const tempDirectory = process.env['RUNNER_TEMP'] || ''
+    ok(tempDirectory, 'Expected RUNNER_TEMP to be defined')
+    return tempDirectory
+  }
+
 async function downloadAppfile(version) {
     if (process.platform === 'win32') {
         const appfileDownload = await tc.downloadTool(`${baseDownloadURL}/v${version}/appfile_windows_amd64.exe`);
-        return appfileDownload;
+        return path__WEBPACK_IMPORTED_MODULE_0__.dirname(appfileDownload);
     }
     if (process.platform === 'darwin') {
         const appfileDownload = await tc.downloadTool(`${baseDownloadURL}/v${version}/appfile_darwin_amd64`);
-        return appfileDownload;
+        return path__WEBPACK_IMPORTED_MODULE_0__.dirname(appfileDownload);
     }
     const appfileDownload = await tc.downloadTool(`${baseDownloadURL}/v${version}/appfile_linux_amd64`);
-    return appfileDownload;
+    return path__WEBPACK_IMPORTED_MODULE_0__.dirname(appfileDownload);
 }
 
 async function run() {
@@ -1766,6 +1782,7 @@ async function run() {
         var path = tc.find("appfile", version);
         if (!path) {
             const installPath = await downloadAppfile(version);
+            core.info(`>>> Installation path: ${installPath}`);
             path = await tc.cacheDir(installPath, 'appfile', version);
         }
         core.addPath(path);
@@ -9516,4 +9533,43 @@ exports.exec = exec;
 
 /***/ })
 
-/******/ });
+/******/ },
+/******/ function(__webpack_require__) { // webpackRuntimeModules
+/******/ 	"use strict";
+/******/ 
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	!function() {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = function(exports) {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	!function() {
+/******/ 		// getDefaultExport function for compatibility with non-harmony modules
+/******/ 		__webpack_require__.n = function(module) {
+/******/ 			var getter = module && module.__esModule ?
+/******/ 				function getDefault() { return module['default']; } :
+/******/ 				function getModuleExports() { return module; };
+/******/ 			__webpack_require__.d(getter, 'a', getter);
+/******/ 			return getter;
+/******/ 		};
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/define property getter */
+/******/ 	!function() {
+/******/ 		// define getter function for harmony exports
+/******/ 		var hasOwnProperty = Object.prototype.hasOwnProperty;
+/******/ 		__webpack_require__.d = function(exports, name, getter) {
+/******/ 			if(!hasOwnProperty.call(exports, name)) {
+/******/ 				Object.defineProperty(exports, name, { enumerable: true, get: getter });
+/******/ 			}
+/******/ 		};
+/******/ 	}();
+/******/ 	
+/******/ }
+);
